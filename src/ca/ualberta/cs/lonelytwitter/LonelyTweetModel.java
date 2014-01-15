@@ -8,7 +8,7 @@ import java.util.Date;
  * public - anywhere
  */
 
-public abstract class lonelyTweetModel {
+public abstract class LonelyTweetModel {
 	protected String text;
 	protected Date timeStamp;
 	
@@ -27,12 +27,12 @@ public abstract class lonelyTweetModel {
 		return false;
 	}
 	
-	public lonelyTweetModel(String text, Date timeStamp) {
+	public LonelyTweetModel(String text, Date timeStamp) {
 		super();
 		this.text = text;
 		this.timeStamp = timeStamp;
 	}
-	public lonelyTweetModel(String text) {
+	public LonelyTweetModel(String text) {
 		super();
 		this.text = text;
 		this.timeStamp = new Date();

@@ -24,4 +24,14 @@ public class lonelyTweetModel {
 	public void setTimeStamp(Date timeStamp) {
 		this.timeStamp = timeStamp;
 	}
+	public lonelyTweetModel(String text, Date timeStamp) {
+		super();
+		this.text = text;
+		this.timeStamp = timeStamp;
+	}
+	public lonelyTweetModel(String text) {
+		super();
+		this.text = text;
+		this.timeStamp = new Date();
+	}
 }

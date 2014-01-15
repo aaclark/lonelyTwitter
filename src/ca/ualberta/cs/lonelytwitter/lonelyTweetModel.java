@@ -8,22 +8,25 @@ import java.util.Date;
  * public - anywhere
  */
 
-public class lonelyTweetModel {
-	private String text;
-	private Date timeStamp;
+public abstract class lonelyTweetModel {
+	protected String text;
+	protected Date timeStamp;
 	
 	public String getText() {
 		return text;
 	}
-	public void setText(String text) {
-		this.text = text;
-	}
+	public abstract void setText(String text);
+	
 	public Date getTimeStamp() {
 		return timeStamp;
 	}
 	public void setTimeStamp(Date timeStamp) {
 		this.timeStamp = timeStamp;
 	}
+	public boolean getTweetImportance() {
+		return false;
+	}
+	
 	public lonelyTweetModel(String text, Date timeStamp) {
 		super();
 		this.text = text;
@@ -34,4 +37,5 @@ public class lonelyTweetModel {
 		this.text = text;
 		this.timeStamp = new Date();
 	}
+	
 }

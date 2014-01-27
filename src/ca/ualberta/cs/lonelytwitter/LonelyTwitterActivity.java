@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.google.gson.Gson;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -19,16 +21,26 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 public class LonelyTwitterActivity extends Activity {
-
+	protected Gson gsonSave;
+	protected Gson gsonLoad;
+	
 	private static final String FILENAME = "file.sav";
 	private EditText bodyText;
 	private ListView oldTweetsList;
+	
+	// Added private variable for lonelyTwitter activity
+	private LonelyTwitterActivity currentActivity;
+	//
 	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		
+		// Bound private variable for lonelyTwitter activity
+		currentActivity = this;
+		//
 
 		bodyText = (EditText) findViewById(R.id.body);
 		Button saveButton = (Button) findViewById(R.id.save);
@@ -40,7 +52,14 @@ public class LonelyTwitterActivity extends Activity {
 				setResult(RESULT_OK);
 				String text = bodyText.getText().toString();
 				saveInFile(text, new Date(System.currentTimeMillis()));
-				finish();
+				
+				// Added refresh Adapter & ListView
+				String[] tweets = loadFromFile();
+				ArrayAdapter<String> adapter = new ArrayAdapter<String>(currentActivity,
+						R.layout.list_item, tweets);
+				oldTweetsList.setAdapter(adapter);
+				
+				// finish();
 
 			}
 		});
@@ -59,14 +78,22 @@ public class LonelyTwitterActivity extends Activity {
 	private String[] loadFromFile() {
 		ArrayList<String> tweets = new ArrayList<String>();
 		try {
+			gsonLoad = new Gson();
+			FileInputStream fis = openFileInput(FILENAME);
+			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+			tweets.add(gsonLoad.fromJson(in, String.class));
+			
+			
+			/*
 			FileInputStream fis = openFileInput(FILENAME);
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 			String line = in.readLine();
 			while (line != null) {
 				tweets.add(line);
 				line = in.readLine();
+			
 			}
-
+			*/
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,11 +106,18 @@ public class LonelyTwitterActivity extends Activity {
 	
 	private void saveInFile(String text, Date date) {
 		try {
+			gsonSave = new Gson();
+			FileOutputStream fos = openFileOutput(FILENAME,
+					Context.MODE_APPEND);
+			fos.write(gsonSave.toJson(date.toString() + " | " + text, String.class).getBytes() );
+			
+			/*
 			FileOutputStream fos = openFileOutput(FILENAME,
 					Context.MODE_APPEND);
 			fos.write(new String(date.toString() + " | " + text)
 					.getBytes());
 			fos.close();
+			*/
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
